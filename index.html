@@ -7,17 +7,14 @@
 </head>
 <body>
 
+
     <header>
         <h1>Huerta Inteligente</h1>
         <p>Medición en tiempo real desde Firebase</p>
     </header>
 
-    <section class="contenedor">
-        <label for="idAlumno">ID del estudiante:</label>
-        <input type="text" id="idAlumno" placeholder="Ej: alumno01">
 
-        <button id="btnCargar">Mostrar Datos</button>
-
+   
         <div class="tarjeta">
             <h2>Temperatura</h2>
             <div class="barra">
@@ -25,15 +22,27 @@
             </div>
         </div>
 
+
+        <div class="tarjeta">
+            <h2>Humedad del Aire</h2>
+            <div class="barra">
+                <div id="barraHumedadAire" class="barra-interna">0%</div>
+            </div>
+        </div>
+
+
         <div class="tarjeta">
             <h2>Humedad del Suelo</h2>
             <div class="barra">
-                <div id="barraHumedad" class="barra-interna">0%</div>
+                <div id="barraHumedadSuelo" class="barra-interna">0%</div>
             </div>
         </div>
     </section>
 
-        <script src="java.js"></script>
+
+   
+
 
 </body>
+<script type="module" src="java.js"></script>
 </html>
