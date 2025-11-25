@@ -1,47 +1,59 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+import { getDatabase, ref, onValue, off } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+
+
 const firebaseConfig = {
-    apiKey: "TU_API_KEY",
-    authDomain: "TU_AUTH_DOMAIN",
-    databaseURL: "TU_DB_URL",
-    projectId: "TU_ID",
-    storageBucket: "TU_BUCKET",
-    messagingSenderId: "TU_SENDER",
-    appId: "TU_APP_ID"
+    apiKey: "AIzaSyCrB4xgCBRmpujDcvOOihSVZ6MIFOPE56M",
+    authDomain: "proyectoclase1-2025.firebaseapp.com",
+    databaseURL: "https://huertamaxi2025-default-rtdb.firebaseio.com",
+    projectId: "proyectoclase1-2025",
+    storageBucket: "proyectoclase1-2025.firebasestorage.app",
+    messagingSenderId: "822869341917",
+    appId: "1:822869341917:web:8d4d76a6493df78963cd34"
 };
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
 
-document.getElementById("btnCargar").addEventListener("click", () => {
-    const id = document.getElementById("idAlumno").value;
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-    if (!id) {
-        alert("Debes ingresar un ID de estudiante");
-        return;
+
+let refActiva = null;
+
+
+function iniciarMonitoreo() {
+    if (refActiva) {
+        off(refActiva);
     }
 
-    const ref = db.ref("sensores/" + id);
 
-    ref.on("value", snapshot => {
+    refActiva = ref(db, "/");
+
+
+    onValue(refActiva, (snapshot) => {
         const data = snapshot.val();
 
+
         if (!data) {
-            alert("No existen datos para este estudiante");
+            console.error("No existen datos en Firebase");
             return;
         }
 
-        actualizarBarra(
-            "barraTemperatura",
-            data.temperatura,
-            50              
-        );
 
-        actualizarBarra(
-            "barraHumedad",
-            data.humedad,
-            100             
-        );
+        if (data.temperatura !== undefined) {
+            actualizarBarra("barraTemperatura", parseFloat(data.temperatura), 50);
+        }
+
+
+        if (data.humedadAire !== undefined) {
+            actualizarBarra("barraHumedadAire", parseFloat(data.humedadAire), 100);
+        }
+
+
+        if (data.humedadSuelo !== undefined) {
+            actualizarBarra("barraHumedadSuelo", parseInt(data.humedadSuelo), 1024);
+        }
     });
-});
+}
 
 
 function actualizarBarra(idBarra, valor, max) {
@@ -61,3 +73,8 @@ function actualizarBarra(idBarra, valor, max) {
         barra.className = "barra-interna alta";
     }
 }
+
+
+
+
+iniciarMonitoreo();
